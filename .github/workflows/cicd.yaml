@@ -1,0 +1,14 @@
+name: Microservice CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ "test-actions" ]
+
+jobs:
+  build-and-push:
+    uses: arco-fintech/test-github-build/.github/workflows/build-push-harbor.yaml@test
+    with:
+      run-tests: false
+    secrets: inherit
