@@ -1,14 +1,26 @@
-name: Microservice CI/CD
+name: Sonar Scan
 
 on:
   workflow_dispatch:
   push:
     # Edit to the branch(es) you want to build and deploy on each push.
-    branches: [ "test-actions" ]
+    branches: [ "Main" ]
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
 
 jobs:
-  build-and-push:
-    uses: arco-fintech/test-github-build/.github/workflows/build-push-harbor.yaml@test
-    with:
-      run-tests: false
-    secrets: inherit
+  sonar-scan:
+    name: Sonar Scan
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
